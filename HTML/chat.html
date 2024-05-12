@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<textarea name="mensagem" id="mensagem"></textarea>
+<h1 id="nome"></h1>
+<p id="sms"></p>
+
+<button type="button" onclick="MessageInsert()">Enviar</button>
+<button type="button" onclick="Logout()">Enviar</button>
+
+
+
+</body>
+<script src="../JS/Mensagem/MensagemInsert.js"></script>
+<script src="../JS/Mensagem/MensagemRead.js"></script>
+<script src="../JS/Helpers/auth.js"></script>
+<script>
+    function Logout(){
+        sessionStorage.removeItem('user')
+        window.location = "../HTML/login.html"
+    }
+</script>
+
+
+
+</html>

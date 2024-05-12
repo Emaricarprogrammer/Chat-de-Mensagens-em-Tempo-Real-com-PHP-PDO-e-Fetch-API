@@ -1,7 +1,7 @@
 <?php
 //Conexão ao db
-session_start();
-require_once './carregar_env_sem_bibliotecas.php';
+require_once 'carregar_env_sem_bibliotecas.php';
+
 carregarEnv(__DIR__ . '/.env');
 
 $host = getenv('DB_HOST');
@@ -16,9 +16,10 @@ $username = "root";
 $password = "";*/
 
 try {
-    $Obejcto_conexao = new \PDO("mysql:host=$host;dbname=$db_name", $username, $password);
-    echo "Conectado com sucesso";
+    $Objecto_conexao = new \PDO("mysql:host=$host;dbname=$db_name", $username, $password);
+    
 } catch(PDOException $error) {
     echo "Houve um erro na conexão: " . $error->getMessage();
 }
+
 ?>

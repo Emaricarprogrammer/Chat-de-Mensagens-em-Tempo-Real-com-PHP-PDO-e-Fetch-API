@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!--Link do arquivo Css-->
+    <link rel="stylesheet" href=" style.css">
+    <title>Criar conta</title>
+</head>
+<body>
+    <!--Criar-->
+    <div class="container">
+        <div class="form signup">
+            <span class="title">Criar conta</span>
+
+                <div class="input-field">
+                        <input type="text" name="nome" id="nome" placeholder="Insira o seu nome" required>
+                        
+                    </div>
+                    <div class="input-field">
+                        <input type="text" name="email" id="email" placeholder="Insira o seu email" required>
+                        
+                    </div>
+                    <div class="input-field">
+                        <input type="password" class="password" name="password" id="password" placeholder="Insira uma sua senha" required>
+                      
+                    </div>
+
+                    <div class="input-field button">
+                        <input type="button"  onclick="CreateUser()" value="Criar conta">
+                    </div>
+                    <div class="login-signup">
+                        <span class="text">Já possui uma conta? <a class="text login-link" href="./login.html">Entrar</a></span>
+                    </div>
+
+            </div>
+        </div>
+    </div>
+    
+   
+</body>
+<script src="../JS/Usuario/UserInsert_js.js"> </script>
+</html>
