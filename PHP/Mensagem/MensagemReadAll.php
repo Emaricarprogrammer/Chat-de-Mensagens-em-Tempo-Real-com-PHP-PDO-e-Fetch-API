@@ -4,12 +4,13 @@ include_once "../db/Conexao.php";
 
 try {
     global $Objecto_conexao;
-    $Sql_query_string = "SELECT tb_usuarios.*, tb_mensagens.* from tb_usuarios INNER JOIN tb_mensagens on tb_usuarios.id_usuario = tb_mensagens.id_usuario";
+    $Sql_query_string = "SELECT tb_usuarios.*, tb_mensagens.* from tb_usuarios INNER JOIN tb_mensagens on tb_usuarios.id_usuario = tb_mensagens.id_usuario order by tb_mensagens.id_mensagem";
     $stmt = $Objecto_conexao->prepare($Sql_query_string);
     $stmt->execute();
     $Resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    if(!$Resultado){
-        echo json_encode(["success" => false, "message" => "Sem mensagens " ]);
+    $NumRows = $stmt->rowCount();// Verificar se há resultados
+    if($NumRows == 0){
+        exit( json_encode(["Message" => true, "NoMessage" => "Sem mensagens ainda" ]));
 
     }
     
@@ -18,7 +19,10 @@ try {
     foreach ($Resultado as $mensagem) {
         $mensagens[] = [
             'nome' => $mensagem['username'],
-            'Mensagens' => $mensagem['mensagem']
+            'Mensagens' => $mensagem['mensagem'],
+            'id'  => $mensagem['id_mensagem'],
+            'senderId' => $mensagem['id_usuario'] // ID do remetente da mensagem
+
         ];
     }
     
@@ -27,9 +31,9 @@ try {
     
     // Enviar a resposta JSON
     header('Content-Type: application/json');
-    echo $Resultado_json;
+    exit( $Resultado_json);
 } catch (PDOException $erro) {
     // Tratar erros
-    echo json_encode(["success" => false, "message" => "Erro ao ler usuários: " . $erro->getMessage()]);
+    exit( json_encode(["Messagerror" => true, "message" => "Erro ao ler usuários: " . $erro->getMessage()]));
 }
 ?>

@@ -1,31 +1,58 @@
-async function UserLogin() { // Define uma função assíncrona chamada UserLogin
-    const UserEmail = email.value; // Obtém o valor do email do usuário do elemento HTML com o ID "email"
-    const UserPassword = password.value; // Obtém o valor da senha do usuário do elemento HTML com o ID "password"
+async function UserLogin() {
+    // Obtém o valor do campo de entrada com o ID 'email'
+    const UserEmail = document.getElementById('email').value;
+    
+    // Obtém o valor do campo de entrada com o ID 'password'
+    const UserPassword = document.getElementById('password').value;
 
-    try { // Início do bloco try para tratamento de erros
-        const formData = new FormData(); // Cria um novo objeto FormData para enviar os dados do formulário
-
-        // Adiciona os dados de email e senha ao objeto FormData
+    try {
+        // Cria uma nova instância de FormData para armazenar os dados do formulário
+        const formData = new FormData();
+        
+        // Adiciona o valor do email ao formData
         formData.append("email", UserEmail);
+        
+        // Adiciona o valor da senha ao formData
         formData.append("password", UserPassword);
 
-        const response = await fetch("../PHP/Usuario/UsuarioLogin.php", { // Envia uma solicitação fetch para o servidor
-            method: "POST", // Define o método HTTP como POST
-            body: formData // Define os dados do formulário como corpo da solicitação
+        // Envia uma requisição POST para o script PHP no servidor
+        const response = await fetch("../PHP/Usuario/UsuarioLogin.php", {
+            method: "POST", // Define o método da requisição como POST
+            body: formData  // Define o corpo da requisição com os dados do formulário
         });
 
-        const data = await response.json(); // Analisa a resposta da solicitação como JSON
-
-        // Verifica se a autenticação foi bem-sucedida
-        if (data.success) {
-            sessionStorage.setItem("user", JSON.stringify(data.logado))
-            sessionStorage.setItem("status", "online")
-            window.location.href = data.redirect; // Redireciona para a página chat.html
+        // Converte a resposta do servidor para JSON
+        const data = await response.json();
         
+        // Exibe a resposta do servidor no console
+       // console.log('Server response:', data);
+
+        // Verifica se o login foi bem-sucedido
+        if (data.successLogin) {
+            /*
+            // Armazena a informação de login bem-sucedido no sessionStorage
+            sessionStorage.setItem("logado", "true");
+            
+            // Armazena o nome do usuário no sessionStorage
+            sessionStorage.setItem("UserName", data.nome);
+            
+            // Armazena o email do usuário no sessionStorage
+            sessionStorage.setItem("UserEmail", data.email);
+            
+            // Armazena o status do usuário como 'online' no sessionStorage
+            sessionStorage.setItem("status", "online");
+*/
+            // Redireciona o usuário para a página de chat se o login for bem-sucedido
+            window.location.href = data.redirect;
         } else {
-            console.log(data.message); // Registra uma mensagem de erro no console se a autenticação falhar
+            // Exibe uma mensagem de erro caso o login não seja bem-sucedido
+            senha_error.innerText = data.MessageLogin;
+            
+            // Exibe a mensagem de erro no console
+            //console.log(data.MessageLogin);
         }
-    } catch (error) { // Captura e trata qualquer erro que ocorra durante o processo
-        console.error("Houve um erro:", error); // Registra o erro no console do navegador
+    } catch (error) {
+        // Exibe uma mensagem de erro no console caso ocorra uma exceção
+        console.error("Houve um erro:", error);
     }
 }

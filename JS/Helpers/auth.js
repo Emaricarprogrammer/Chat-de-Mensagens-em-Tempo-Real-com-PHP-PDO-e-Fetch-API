@@ -1,19 +1,32 @@
-// Verificar autenticação antes do carregamento completo da página
-document.addEventListener("DOMContentLoaded", function() {
-    // Função para verificar autenticação
-    function IsAuth() {
-        // Verificar se há dados de sessão do usuário
-        const user = sessionStorage.getItem('user'); // ou localStorage.getItem('user'); se estiver usando localStorage
-        console.log(user)
+// Define uma função assíncrona chamada IsAuth
+async function IsAuth() {
+    try {
+        // Envia uma requisição GET para o servidor
+        const response = await fetch("../PHP/Mensagem/MensagemInsert.php");
 
-        if(!user){
-            window.location = "../HTML/login.html";
+        // Converte a resposta do servidor para JSON e aguarda a conclusão
+        const responseData = await response.json();
+
+        // Verifica se a resposta indica que o usuário não está autenticado
+        if (responseData.UserUnauth) {
+            // Exibe uma mensagem de erro no elemento 'error_msg' com o texto de UserUnauth
+            error_msg.innerText = responseData.UserMessge;
+
+            // Exibe uma mensagem no console com a mensagem do usuário
+            console.log(responseData.UserMessge);
+
+            // Define um item no sessionStorage indicando que o usuário não está logado
+            sessionStorage.setItem("IsLogged", "false");
+            
+
+            // Redireciona o usuário para a URL especificada em responseData.redirect
+            window.location.href = responseData.redirect;
         }
-
-        // Se o usuário não estiver autenticado, redirecionar para a página de login
-        
+    } catch (error) {
+        // Exibe uma mensagem de erro no console em caso de exceção
+        console.log(error);
     }
+}
 
-    // Chamar a função de verificação de autenticação
-    IsAuth();
-});
+// Chama a função IsAuth imediatamente após a definição
+IsAuth();

@@ -5,40 +5,464 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!--Link do arquivo Css-->
-    <link rel="stylesheet" href=" style.css">
+
+    <!--Link para o site de ícones Iconscout-->
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
     <title>Criar conta</title>
 </head>
+<style>
+    /* ==== Google Font Import ====*/
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body{
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+}
+
+.container{
+    position: relative;
+    max-width: 480px; 
+    width: 100%;
+    border-radius: 10px;
+    background: white; 
+    box-shadow: 0px 5px 10px rgba(0 , 0, 0, 0.1);
+}
+
+.container .form{
+    padding: 30px;
+}
+
+.container .form .title{
+    position: relative;
+    font-size: 27px;
+    font-weight: 600;
+}
+
+.form .title::before{
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 3px;
+    width: 30px;
+    background-color: #4070f4;
+    border-radius: 25px;
+}
+
+.form .input-field{
+    position: relative;
+    height: 50px;
+    width: 100%;
+    margin-top: 30px; 
+}
+
+.input-field input{
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    padding: 0 35px;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    border-bottom: 2px solid #ccc;
+    border-top: 2px solid transparent;
+    transform: all 0.2s ease; 
+
+}
+
+.input-field input:is(:focus, :valid){
+    border-bottom-color: #4070f4;
+}
+
+.input-field i{
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #999;
+    font-size: 23px;
+    transform: all 0.2s ease;
+}
+
+
+.input-field input:is(:focus, :valid) ~ i{
+    color: #4070f4;
+}
+
+.input-field i.icon{
+    left: 0;
+}
+
+.input-field i.showHidePw{
+    right: 0;
+    
+}
+
+.form .checkbox-text{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 20px; 
+}
+
+.checkbox-text .checkbox-content{
+    display: flex;
+    align-items: center;
+}
+
+.checkbox-content input{
+    margin: 0 8px -2px 4px;
+    accent-color: #4070f4;
+}
+
+.form .text{
+    color: #333;
+    font-size: 14px;
+}
+
+.form a.text{
+    color: #4070f4;
+    text-decoration: none;
+}
+
+.form a:hover{
+    text-decoration: underline;
+}
+
+.form .button{
+    margin-top: 35px;
+}
+
+.form .button input{
+   border: none;
+   color: white;
+   font-size: 17px;
+   font-weight: 600;
+   letter-spacing: 1px;
+   border-radius: 6px;
+   background-color: #4070f4;
+   cursor: pointer;
+   transition: all 0.3s ease;
+}
+
+.button .input:hover{
+    background-color: #4070f4;
+}
+
+.form .login-signup{
+    margin-top: 30px;
+    text-align: center;
+}
+
+.field-image{
+    display: flex;
+    flex-direction: column;
+    margin-top: 40px;
+    color: #67676a;
+    gap: 10px;
+}
+
+/*Area usuários*/
+.form{
+    padding: 25px 30px;
+}
+
+.form header, .form-list a{
+    display: flex;
+    align-items: center;
+    padding-bottom: 20px;
+    justify-content: space-between;
+    border-bottom: 1px solid #e6e6e6;
+}
+.container img{
+    object-fit: cover;
+    border-radius: 50px;
+}
+
+
+:is(.form, .form-list) .content,
+.form-list a .content
+{
+    display: flex;
+    align-items: center;
+}
+
+a{
+    text-decoration: none;
+}
+
+.form header .content img{
+    height: 50px;
+    width: 50px;
+}
+
+:is(.form, .form-list) .details{
+    margin-left: 15px;
+    color: #000;
+    
+}
+
+
+:is(.form, .form-list) .details span{
+    font-size: 18px;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+
+.form header .logout{
+    color: #fff;
+    font-size: 17px;
+    padding: 7px 15px;
+    background: #4070f4;
+    border-radius: 5px;
+}
+
+.form .search{
+    display: flex;
+    margin: 20px 0;
+    position: relative;
+    align-items: center;
+    justify-content: space-between;
+   
+}
+
+.form .search .text{
+    font-size: 18px;
+}
+
+.form .search input{
+   position: absolute;
+   height: 42px;
+   width: calc(100% - 50px);
+   border: 1px solid #ccc;
+   padding: 0 13px;
+   font-size: 16px;
+   border-radius: 5px 0 0 5px;
+   outline: none; 
+   opacity: 0;
+   pointer-events: none;
+   transition: all 0.2s ease;
+}
+
+.form .search input.active{
+    opacity: 1;
+    pointer-events: auto    ;
+}
+
+.form .search button{
+    width: 47px;
+    height: 42px;
+    border: none;
+    outline: none;
+    border-radius: 0 5px 5px 0;
+    color: #333;
+    cursor: pointer;
+    font-size: 17px;
+    background-color: #fff;
+    transition: all 0.2s ease;
+}
+
+.form .search button.active{
+    color: #fff;
+    background-color: #4070f4;
+
+}
+
+.form .search button.active i::before{
+    content: "x";
+    font-weight: 600;
+}
+
+.form-list{
+    max-height: 350px;
+    overflow: auto;
+}
+
+:is(.form-list, .chat-box)::-webkit-scrollbar{
+    width: 0px;
+
+}
+
+.form-list a{
+    margin-bottom: 15px;
+    page-break-after: 10px;
+    padding-right: 15px;
+    border-bottom-color: #f1f1f1;
+}
+.form-list a:last-child{
+    border: none;
+    margin-bottom: 0px;
+}
+
+.form-list a .content img{
+    height: 40px;
+    width: 40px;
+
+}
+.form-list a .content p{
+    color: #67676a;
+
+}
+
+.form-list a .status-dot{
+    font-size: 12px;
+    color: #468669;
+}
+
+
+/*vamos usar essa classe no php para exibir status offline*/
+.form-list a .status-dot.offline{
+    color: #ccc;
+}
+
+/*Area do chat*/
+.chat-area header{
+    display: flex;
+    align-items: center;
+    padding: 18px 30px;
+}
+
+.chat-area header .back-icon{
+    font-size: 18px;
+    color: #333;
+}
+.chat-area header img{
+    height: 45px;
+    width: 45px;
+    margin: 0 15px;
+}
+
+.chat-area header span{
+    font-size: 17px;
+    font-weight: 500 ;
+}
+
+.chat-box{
+    height: 500px;
+    overflow-y: auto;
+    background: #f7f7f7;
+    padding: 10px 30px 20px 30px;
+    box-shadow: inset 0 32px 32px -32px rgb(0 0 0 / 5%),inset 0 32px 32px -32px rgba(0, 0, 0, 0.05);
+}
+
+.chat-box .chat p{
+    margin: 15px 0;
+}
+
+.chat-box .chat p{
+    word-wrap: break-word;
+    padding: 8px 16px;
+    box-shadow: inset 0 32px 32px -32px rgb(0 0 0 / 5%),inset 0 32px 32px -32px rgb(0 0 0 / 5%);
+
+}
+
+.chat-box .outgoing{
+    display: flex;
+}
+
+.outgoing .details{
+    margin-left: auto;
+    max-width: calc(100% - 130px);
+}
+
+.outgoing .details p{
+    background: #4070f4;
+    color: #fff;
+    border-radius: 10px 18px 0 18px;
+}
+
+.chat-box .incoming{
+    display: flex;
+    align-items: flex-end;
+}
+
+.chat-box .incoming img{
+    height: 35px;
+    width: 35px;
+}
+
+.incoming .details{
+    margin-left: 10px;
+    margin-right: auto;
+    max-width: calc(100% - 130px);
+}
+
+.incoming .details p{
+    color: #333;
+    background: #fff ;
+    border-radius: 18px 18px 0 18px 0;
+}
+
+.chat-area .typing-area{
+    padding: 18px 30px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.typing-area input{
+    height: 45px;
+    width: calc(100% - 90px);
+    font-size: 17px;
+    border: 1px solid #ccc;
+    padding: 0 13px;
+    border-radius: 5px 0 0 5px;
+    outline: none;
+}
+
+.typing-area button{
+    width: 80px;
+    height: 45px;
+    border: none;
+    outline: none;
+    background: #4070f4;
+    color: #fff;
+    font-size: 19px;
+    cursor: pointer;
+    border-radius: 0 5px 5px 0;
+}
+</style>
 <body>
     <!--Criar-->
     <div class="container">
         <div class="form signup">
             <span class="title">Criar conta</span>
-
+            <form action="#">
                 <div class="input-field">
                         <input type="text" name="nome" id="nome" placeholder="Insira o seu nome" required>
-                        
+                        <i class="uil uil-user"></i>
                     </div>
                     <div class="input-field">
                         <input type="text" name="email" id="email" placeholder="Insira o seu email" required>
-                        
+                        <i class="uil uil-envelope icon"></i>
                     </div>
                     <div class="input-field">
-                        <input type="password" class="password" name="password" id="password" placeholder="Insira uma sua senha" required>
-                      
+                        <input type="password" class="password" name="password" id="password" placeholder="Insira uma senha" required>
+                        <i class="uil uil-lock icon"></i> 
                     </div>
+                    <small id="senha_error" style="color: red;"></small>
 
                     <div class="input-field button">
-                        <input type="button"  onclick="CreateUser()" value="Criar conta">
+                        <input type="button" value="Criar conta" onclick="CreateUser()" required>
                     </div>
                     <div class="login-signup">
                         <span class="text">Já possui uma conta? <a class="text login-link" href="./login.html">Entrar</a></span>
                     </div>
-
+                </form>
             </div>
         </div>
     </div>
     
-   
+    <!--Link do arquivo Javascript-->
+    <script src="../JS/Usuario/UserInsert_js.js"></script>
 </body>
-<script src="../JS/Usuario/UserInsert_js.js"> </script>
 </html>

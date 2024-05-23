@@ -1,24 +1,11 @@
 <?php
-session_start();
+session_start(); // Inicia a sessão
 
-// Limpar a sessão
-$_SESSION = array();
-
-// Invalidar o cookie de sessão
-if (ini_get("session.use_cookies")) {
-    $params = session_get_cookie_params();
-    setcookie(session_name(), '', time() - 42000,
-        $params["path"], $params["domain"],
-        $params["secure"], $params["httponly"]
-    );
-}
-
-// Destruir a sessão
+// Limpa todos os dados de sessão
+session_unset();
 session_destroy();
 
-// Redirecionar para a página de login
-header('Location: ../HTML/login.html');
-exit;
-
-
+// Responde com um JSON indicando sucesso
+echo json_encode(["success" => true, "message" => "Logout realizado com sucesso"]);
+exit();
 ?>

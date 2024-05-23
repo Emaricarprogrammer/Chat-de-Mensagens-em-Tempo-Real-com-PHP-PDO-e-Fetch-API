@@ -1,18 +1,50 @@
-async function ReadMessages() { // Define uma função assíncrona chamada ReadMessages
-    try { // Início do bloco try para tratamento de erros
-        const response = await fetch("../PHP/Mensagem/MensagemReadAll.php"); // Envia uma solicitação para obter todas as mensagens
-        const data = await response.json(); // Converte a resposta em formato JSON
-        
-        sms.innerHTML = ''; // Limpa o conteúdo atual do elemento HTML com o ID "sms"
+// Simule o ID do usuário atual (substitua por sua lógica real de obtenção do ID do usuário)
+let currentUserId = sessionStorage.getItem("currentIDUser");
 
-        // Itera sobre cada mensagem no array de mensagens retornado pelo servidor
+async function ReadMessages() {
+    try {
+        const response = await fetch("../PHP/Mensagem/MensagemReadAll.php");
+
+        if (!response.ok) {
+            throw new Error("Erro ao buscar mensagens do servidor");
+        }
+
+        const data = await response.json();
+
+        const chatBox = document.querySelector('.chat-box'); // Obtém o contêiner de mensagens pela classe
+
+        if (data.Message) {
+            chatBox.innerHTML = `<div>${data.NoMessage}</div>`; // Exibe a mensagem informativa
+            return;
+        }
+
+        chatBox.innerHTML = ''; // Limpa o conteúdo atual do contêiner de mensagens
+
         data.forEach(message => {
-            const Mensagem = document.createElement('div'); // Cria um novo elemento <div> para exibir a mensagem
-            Mensagem.textContent = `${message.nome}: ${message.Mensagens}`; // Define o conteúdo de texto do elemento para exibir a mensagem
-            sms.appendChild(Mensagem); // Adiciona o elemento da mensagem à interface do usuário
+
+            const chatDiv = document.createElement('div');
+            chatDiv.classList.add('chat'); // Classe base para estilos comuns
+
+            const detailsDiv = document.createElement('div');
+            detailsDiv.classList.add('details');
+
+            detailsDiv.innerHTML = `
+                <p>${message.nome}: ${message.Mensagens}</p>
+            `;
+
+            if (parseInt(message.senderId) == currentUserId) {
+                chatDiv.classList.add('outgoing'); // Estilos para mensagens enviadas pelo usuário atual
+            } else {
+                chatDiv.classList.add('incoming'); // Estilos para mensagens recebidas
+            }
+
+          
+
+            chatDiv.appendChild(detailsDiv);
+            chatBox.appendChild(chatDiv);
         });
-    } catch (error) { // Captura e trata qualquer erro que ocorra durante o processo
-        console.error('Erro ao buscar mensagens:', error); // Registra o erro no console do navegador
+    } catch (error) {
+        console.error('Erro ao buscar mensagens:', error);
     }
 }
 

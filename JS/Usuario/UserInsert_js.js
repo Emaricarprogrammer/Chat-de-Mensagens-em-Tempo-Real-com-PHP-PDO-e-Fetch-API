@@ -4,7 +4,7 @@ async function CreateUser() { // Define uma função assíncrona chamada CreateU
     const UserPassword = password.value; // Obtém o valor da senha do usuário do elemento HTML com o ID "password"
     const UserStatus = status.value; // Obtém o valor do status do usuário do elemento HTML com o ID "status"
 
-    console.log(UserName, UserEmail, UserPassword, UserStatus); // Registra os valores obtidos no console para depuração
+    //console.log(UserName, UserEmail, UserPassword, UserStatus); // Registra os valores obtidos no console para depuração
 
     try { // Início do bloco try para tratamento de erros
         const UserForm = new FormData(); // Cria um novo objeto FormData para enviar os dados do formulário
@@ -27,18 +27,27 @@ async function CreateUser() { // Define uma função assíncrona chamada CreateU
         if (!response.ok) {
             throw new Error('Erro ao criar este usuário'); // Lança um erro se a resposta não estiver OK
         }
-
         // Verifica o conteúdo da resposta
-        const responseData = await response.text();
-        
-        // Verifica se a resposta contém a mensagem "Usuário inserido com sucesso"
-        if (responseData.includes("Usuário inserido com sucesso")) {
-            console.log("Usuário criado com sucesso"); // Registra uma mensagem de sucesso no console
+        const responseData = await response.json();
+
+
+        if (responseData.AllCamps) {
+            senha_error.innerText = responseData.MessageAllCamps
+            //console.log(responseData.MessageAllCamps);
+        } else if (responseData.EmailExists) {
+            senha_error.innerText = responseData.MessageEmailExists
+            //console.log(responseData.MessageEmailExists);
+        } else if (responseData.PasswordValid === false) {
+            senha_error.innerText = responseData.MessagePassword
+            //console.log(responseData.MessagePassword);
+        }else if (responseData.logado) {
+            //console.log(responseData.MessageLogado); // Registra uma mensagem de sucesso no console
+            window.location.href = responseData.redirect; // Redireciona o usuário para a página de login
         } else {
             // Lança um erro se a resposta não contiver a mensagem esperada
             throw new Error('Erro ao criar este usuário');
         }
     } catch (error) { // Captura e trata qualquer erro que ocorra durante o processo
-        console.error("Houve um erro: ", error); // Registra o erro no console do navegador
+        console.log("Houve um erro: ", error); // Registra o erro no console do navegador
     }
 }

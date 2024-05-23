@@ -1,39 +1,58 @@
-async function MessageInsert() { // Define uma função assíncrona chamada MessageInsert
-    const Message = mensagem.value; // Obtém o valor da mensagem do elemento HTML com o ID "mensagem"
+async function MessageInsert() {
+    // Obtém o valor da mensagem do elemento 'mensagem' e remove espaços em branco no início e no final
+    const message = mensagem.value.trim();
 
-    try { // Início do bloco try para tratamento de erros
-        const formData = new FormData(); // Cria um novo objeto FormData para enviar os dados do formulário
+    try {
+        // Verifica se a mensagem está vazia
+        if (!message) {
+            // Exibe uma mensagem no console se a mensagem estiver vazia
+            console.log("Enviar uma mensagem");
+            // Interrompe o processo se a mensagem estiver vazia
+            return;
+        }
 
-        // Adiciona a mensagem ao objeto FormData
-        formData.append("mensagem", Message);
+        // Cria uma nova instância de FormData para armazenar a mensagem
+        const formData = new FormData();
+        // Adiciona a mensagem ao formData
+        formData.append("mensagem", message);
 
-        const cabecalho = { // Define o cabeçalho da solicitação fetch
-            method: "POST", // Define o método HTTP como POST
-            body: formData // Define os dados do formulário como corpo da solicitação
+        // Define as opções da requisição, incluindo o método e o corpo da requisição
+        const options = {
+            method: "POST", // Define o método da requisição como POST
+            body: formData  // Define o corpo da requisição com os dados do formulário
         };
 
-        // Envia uma solicitação fetch para o servidor para inserir a mensagem
-        const response = await fetch("../PHP/Mensagem/MensagemInsert.php", cabecalho);
-        
-        // Verifica se a resposta da solicitação está OK
+        // Envia uma requisição POST para o script PHP no servidor
+        const response = await fetch("../PHP/Mensagem/MensagemInsert.php", options);
+
+        // Verifica se a resposta não está OK (código de status fora do intervalo 200-299)
         if (!response.ok) {
-            throw new Error("Erro ao enviar esta mensagem"); // Lança um erro se a resposta não estiver OK
+            // Lança um erro se a resposta não estiver OK
+            throw new Error("Erro ao enviar esta mensagem");
         }
 
-        // Converte a resposta em formato JSON
+        // Converte a resposta do servidor para JSON e aguarda a conclusão
         const responseData = await response.json();
+        const iduser = responseData.idUser
+        sessionStorage.setItem("currentIDUser", iduser)
         
-        // Exibe o ID da mensagem no console
-        console.log(responseData.messageid);
         
-        // Verifica se a inserção da mensagem foi bem-sucedida
-        if (responseData.success) {
-            console.log("Mensagem enviada com sucesso"); // Registra uma mensagem de sucesso no console
+        // Exibe a resposta JSON no console para inspeção
+        //console.log(responseData);
+       //console.log(responseData.nome)
+        // Verifica se a mensagem foi enviada com sucesso
+        if (responseData.Messagesuccess) {
+            
+            // Exibe uma mensagem de sucesso no console
+            //console.log(responseData.MessageSent);
         } else {
-            // Lança um erro com a mensagem de erro recebida do servidor, ou uma mensagem padrão se não houver mensagem de erro
-            throw new Error(responseData.message || 'Erro ao enviar esta mensagem');
+            // Define uma mensagem de erro padrão ou usa a mensagem de erro do servidor
+            const errorMessage = responseData.MessageError || "Erro ao enviar esta mensagem";
+            // Lança um erro com a mensagem de erro apropriada
+            throw new Error(errorMessage);
         }
-    } catch (error) { // Captura e trata qualquer erro que ocorra durante o processo
-        console.error("Houve um erro: ", error); // Registra o erro no console do navegador
+    } catch (error) {
+        // Exibe uma mensagem de erro no console em caso de exceção
+        console.error("Houve um erro: ", error);
     }
 }
